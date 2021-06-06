@@ -44,12 +44,14 @@ module NewRelic
         end
 
         def start(name, id, payload) #THREAD_LOCAL_ACCESS
-          return if cached?(payload)
-          return unless NewRelic::Agent.tl_is_execution_traced?
+          ActiveSupport.on_load(:active_record) do
+            return if cached?(payload)
+            return unless NewRelic::Agent.tl_is_execution_traced?
 
-          config = active_record_config(payload)
-          segment = start_segment(config, payload)
-          push_segment(id, segment)
+            config = active_record_config(payload)
+            segment = start_segment(config, payload)
+            push_segment(id, segment)
+          end
         rescue => e
           log_notification_error(e, name, 'start')
         end
