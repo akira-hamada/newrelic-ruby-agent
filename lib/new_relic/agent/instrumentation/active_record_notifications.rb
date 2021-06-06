@@ -149,11 +149,13 @@ DependencyDetection.defer do
   end
 
   executes do
-    if ::ActiveRecord::VERSION::MAJOR == 5 \
-        && ::ActiveRecord::VERSION::MINOR.to_i == 1 \
-        && ::ActiveRecord::VERSION::TINY.to_i >= 6
+    ActiveSupport.on_load(:active_record) do
+      if ::ActiveRecord::VERSION::MAJOR == 5 \
+          && ::ActiveRecord::VERSION::MINOR.to_i == 1 \
+          && ::ActiveRecord::VERSION::TINY.to_i >= 6
 
-      ::ActiveRecord::Base.prepend ::NewRelic::Agent::Instrumentation::ActiveRecordPrepend::BaseExtensions516
+        ::ActiveRecord::Base.prepend ::NewRelic::Agent::Instrumentation::ActiveRecordPrepend::BaseExtensions516
+      end
     end
   end
 end
