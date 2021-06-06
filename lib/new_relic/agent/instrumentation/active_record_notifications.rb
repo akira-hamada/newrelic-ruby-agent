@@ -82,9 +82,14 @@ DependencyDetection.defer do
   named :active_record_notifications
 
   depends_on do
-    defined?(::ActiveRecord) && defined?(::ActiveRecord::Base) &&
-      defined?(::ActiveRecord::VERSION) &&
-      ::ActiveRecord::VERSION::MAJOR.to_i >= 4
+    ActiveSupport.on_load(:active_record) do
+      defined?(::ActiveRecord) && defined?(::ActiveRecord::Base) &&
+        defined?(::ActiveRecord::VERSION) &&
+        ::ActiveRecord::VERSION::MAJOR.to_i >= 4
+    end
+    # defined?(::ActiveRecord) && defined?(::ActiveRecord::Base) &&
+      # defined?(::ActiveRecord::VERSION) &&
+      # ::ActiveRecord::VERSION::MAJOR.to_i >= 4
   end
 
   depends_on do

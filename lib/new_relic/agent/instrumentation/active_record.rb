@@ -34,11 +34,20 @@ module NewRelic
         end
 
         def self.included(instrumented_class)
-          instrumented_class.class_eval do
-            unless instrumented_class.method_defined?(:log_without_newrelic_instrumentation)
-              alias_method :log_without_newrelic_instrumentation, :log
-              alias_method :log, :log_with_newrelic_instrumentation
-              protected :log
+          # instrumented_class.class_eval do
+            # unless instrumented_class.method_defined?(:log_without_newrelic_instrumentation)
+              # alias_method :log_without_newrelic_instrumentation, :log
+              # alias_method :log, :log_with_newrelic_instrumentation
+              # protected :log
+            # end
+          # end
+          ActiveSupport.on_load(:active_record) do
+            instrumented_class.class_eval do
+              unless instrumented_class.method_defined?(:log_without_newrelic_instrumentation)
+                alias_method :log_without_newrelic_instrumentation, :log
+                alias_method :log, :log_with_newrelic_instrumentation
+                protected :log
+              end
             end
           end
         end
