@@ -140,6 +140,7 @@ DependencyDetection.defer do
 
   depends_on do
     ActiveSupport.on_load(:active_record) do
+      puts "debug"
       defined?(::ActiveRecord) && defined?(::ActiveRecord::Base) &&
         (!defined?(::ActiveRecord::VERSION) ||
           ::ActiveRecord::VERSION::MAJOR.to_i <= 3)
