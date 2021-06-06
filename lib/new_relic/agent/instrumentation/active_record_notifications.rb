@@ -102,8 +102,10 @@ DependencyDetection.defer do
   end
 
   executes do
-    ActiveSupport::Notifications.subscribe('sql.active_record',
-      NewRelic::Agent::Instrumentation::ActiveRecordSubscriber.new)
+    ActiveSupport.on_load(:active_record) do
+      ActiveSupport::Notifications.subscribe('sql.active_record',
+        NewRelic::Agent::Instrumentation::ActiveRecordSubscriber.new)
+    end
   end
 
   executes do
